@@ -1,0 +1,26 @@
+http.favicon.hash:-1292923998
+http.favicon.hash:-1166125415
+
+http.title:"Citrix Gateway"
+http.title:"NetScaler"
+
+http.html:"Citrix"
+http.html:"NetScaler"
+
+product:"Citrix Gateway"
+product:"NetScaler"
+
+http.server:"NetScaler"
+http.headers.server:"NetScaler"
+
+ssl.cert.subject.cn:"netscaler"
+ssl.cert.subject.cn:"citrix"
+
+port:443 http.title:"Citrix"
+port:443 http.title:"NetScaler"
+
+http.status_code:200 http.html:"Citrix Gateway"
+http.status_code:200 http.html:"NetScaler"
+
+http.html:"/vpn/index.html"
+http.html:"/Citrix/"

